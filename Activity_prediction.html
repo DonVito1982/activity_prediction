@@ -170,8 +170,8 @@ test_subset &lt;- test_subset[,rows_with_few_empty]</code></pre>
 ## Summary of sample sizes: 14718, 14718, 14718, 14718, 14718, 14718, ... 
 ## Resampling results
 ## 
-##   Accuracy   Kappa     Accuracy SD  Kappa SD   
-##   0.8331211  0.789182  0.007054029  0.008919408
+##   Accuracy   Kappa      Accuracy SD  Kappa SD   
+##   0.8365149  0.7934833  0.007319996  0.009286236
 ## 
 ## </code></pre>
 </div>
@@ -183,34 +183,37 @@ test_subset &lt;- test_subset[,rows_with_few_empty]</code></pre>
 ## 
 ##           Reference
 ## Prediction    A    B    C    D    E
-##          A 1230  165    0    0    0
-##          B   88  767   94    0    0
-##          C    0  103  675   77    0
-##          D    0    0  134  571   99
+##          A 1222  173    0    0    0
+##          B   89  765   95    0    0
+##          C    0   96  703   56    0
+##          D    0    0  144  569   91
 ##          E    0    0    0   97  804
 ## 
 ## Overall Statistics
-##                                           
-##                Accuracy : 0.8252          
-##                  95% CI : (0.8143, 0.8358)
-##     No Information Rate : 0.2688          
-##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
-##                                           
-##                   Kappa : 0.7793          
-##  Mcnemar's Test P-Value : NA              
+##                                          
+##                Accuracy : 0.8285         
+##                  95% CI : (0.8177, 0.839)
+##     No Information Rate : 0.2673         
+##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16      
+##                                          
+##                   Kappa : 0.7835         
+##  Mcnemar's Test P-Value : NA             
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: A Class: B Class: C Class: D Class: E
-## Sensitivity            0.9332   0.7411   0.7475   0.7664   0.8904
-## Specificity            0.9540   0.9530   0.9550   0.9440   0.9758
-## Pos Pred Value         0.8817   0.8082   0.7895   0.7102   0.8923
-## Neg Pred Value         0.9749   0.9322   0.9437   0.9576   0.9753
-## Prevalence             0.2688   0.2111   0.1841   0.1519   0.1841
-## Detection Rate         0.2508   0.1564   0.1376   0.1164   0.1639
+## Sensitivity            0.9321   0.7398   0.7463   0.7881   0.8983
+## Specificity            0.9519   0.9525   0.9616   0.9438   0.9758
+## Pos Pred Value         0.8760   0.8061   0.8222   0.7077   0.8923
+## Neg Pred Value         0.9746   0.9320   0.9410   0.9627   0.9773
+## Prevalence             0.2673   0.2108   0.1921   0.1472   0.1825
+## Detection Rate         0.2492   0.1560   0.1434   0.1160   0.1639
 ## Detection Prevalence   0.2845   0.1935   0.1743   0.1639   0.1837
-## Balanced Accuracy      0.9436   0.8470   0.8513   0.8552   0.9331</code></pre>
-<p>Finally, the Confusion Matrix allows us to estimate the model’s accuracy on 82%</p>
+## Balanced Accuracy      0.9420   0.8462   0.8540   0.8659   0.9371</code></pre>
+<p>Finally, the Confusion Matrix allows us to estimate the model’s accuracy on 82%. The predictions for the testing set are as follows:</p>
+<pre class="r"><code>predict(regreLda2, final_test)</code></pre>
+<pre><code>##  [1] A A A A A C C B A A A A B A B B A A A B
+## Levels: A B C D E</code></pre>
 </div>
 
 

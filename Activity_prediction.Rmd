@@ -94,4 +94,9 @@ estimate is given by the `confusionMatrix` function.
 confusionMatrix(test_subset$classe, predict(regreLda2, test_subset))
 ```
 
-Finally, the Confusion Matrix allows us to estimate the model's accuracy on 82%
+Finally, the Confusion Matrix allows us to estimate the model's accuracy on 82%. The predictions
+for the testing set are as follows:
+
+```{r}
+predict(regreLda2, final_test)
+```
