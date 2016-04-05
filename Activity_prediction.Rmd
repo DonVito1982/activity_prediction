@@ -1,0 +1,97 @@
+---
+title: "Activity_prediction"
+author: "Víctor Zambrano"
+date: "3 de abril de 2016"
+output: html_document
+---
+
+## Summary
+The following document is the result of the anaylis made on the data made public
+by a research team on the Pontifical Catholic University of Rio de Janeiro, Brazil.
+The purpose of the analysis was to device a predicting model based on machine learning,
+and the chosen algorithm to do so was 
+[linear discriminant analysis](https://en.wikipedia.org/wiki/Linear_discriminant_analysis)
+
+
+## Data Loading and splitting
+First we load the project data:
+
+```{r}
+full_data <- read.csv('./data/pml-training.csv')
+final_test <- read.csv('./data/pml-testing.csv')
+```
+
+Now we split the data between training and testing for Cross-validation purposes
+
+```{r}
+library(caret)
+inTrain <- createDataPartition(y=full_data$classe, p=0.75, list=FALSE)
+training <- full_data[inTrain,]
+testing <- full_data[-inTrain,]
+```
+
+## Data Pre-processing
+The working data has 160 variables and it would not be wise to build the model
+with all those variables, so now we take a look at the data to filter it. 
+
+```{r, results='hide'}
+summary(training)
+```
+
+For legibility purposes, the output of the last command was hidden. It showed
+the summary of 160 variables, some of which took the `NA` value a lot of
+times, therefore we'll filter those out.
+
+```{r}
+number_of_na <- as.data.frame(sapply(training, function(x) {sum(is.na(x))}))
+colnames(number_of_na)[1] <- 'Number_of_NAs'
+rows_with_few_NAs <- rownames(number_of_na)[number_of_na$Number_of_NAs<14000]
+train_subset <- training[,rows_with_few_NAs]
+```
+
+That last preprocessing step has to be repeated in the `testing` Data Frame
+
+```{r}
+test_subset <- testing[,rows_with_few_NAs]
+```
+
+Now we take a look at the filtered data
+
+```{r, results='hide'}
+summary(train_subset)
+```
+
+Again... the output of the last command was hidden. It showed the summary of
+93 variables (67 were filtered out in the last preprocessing step). Many of the
+remaining variables are factors that take the `''` value several times. We'll
+filter those out.
+
+```{r}
+number_of_empty <- as.data.frame(sapply(train_subset, function(x) {sum(x=='')}))
+colnames(number_of_empty)[1] <- 'Number_of_empty'
+rows_with_few_empty <- rownames(number_of_empty)[number_of_empty$Number_of_empty<14000]
+train_subset <- train_subset[,rows_with_few_empty]
+test_subset <- test_subset[,rows_with_few_empty]
+```
+
+## Model Training
+For this particular case (an analysis done in MY laptop), computing power is an issue.
+So the algorithm of choice will be linear discriminant analysis, which is a computationally
+convenient algorithm. Moreover, the data will be further preprocessed by performing
+a principal component analysis.
+
+
+```{r}
+regreLda2 <- train(classe ~ ., method='lda', preProcess='pca', data = train_subset)
+regreLda2
+```
+
+## Accuracy estimate
+The previous summary shows an optimistic estimate on the model's accuracy. A more realistic
+estimate is given by the `confusionMatrix` function.
+
+```{r}
+confusionMatrix(test_subset$classe, predict(regreLda2, test_subset))
+```
+
+Finally, the Confusion Matrix allows us to estimate the model's accuracy on 82%
